@@ -24,7 +24,8 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <style>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+   <style>
         body { background-color: #f4f0ec; font-family: 'Segoe UI', sans-serif; }
         .top-nav { background: #3b1845; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; }
         .stat-card { border-radius: 8px; padding: 10px; color: white; text-align: center; width: 120px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -168,7 +169,7 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
             <div class="d-flex gap-2">
                 <!-- <button class="btn btn-purple btn-sm">+ New</button> -->
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deployAssetModal">
                     + New
                 </button>
                 <button class="btn btn-success btn-sm"><i class="fas fa-file-export me-1"></i> Export</button>
@@ -227,23 +228,75 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div  class="modal fade" id="deployAssetModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deployAssetLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg"> <div class="modal-content">
+                <div class="modal-header  text-white"  style="background-color: #3b1845;>
+                    <h1 class="modal-title fs-5" id="deployAssetLabel">
+                        <i class="bi bi-qr-code-scan"></i> Deploy New Asset
+                    </h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 border-end">
+                            <label class="form-label fw-bold">Scan QR Code</label>
+                            <div id="reader" style="width: 100%; min-height: 250px; background: #f8f9fa;" class="rounded border d-flex align-items-center justify-content-center">
+                                <span class="text-muted text-center p-3">Camera feed will appear here.<br>Allow camera access to scan.</span>
+                            </div>
+                            <div class="mt-2 d-grid">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="startScanner()">
+                                    <i class="bi bi-camera"></i> Open Camera
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <form id="deployForm">
+                                <div class="mb-3">
+                                    <label for="assetTag" class="form-label fw-bold">Asset Tag / Serial</label>
+                                    <input type="text" class="form-control" id="assetTag" placeholder="Scanned ID will appear here" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="equipmentName" class="form-label fw-bold">Equipment Name</label>
+                                    <input type="text" class="form-control" id="equipmentName" placeholder="e.g. Laptop, Projector">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="location" class="form-label fw-bold">Location</label>
+                                    <input readonly type="text" class="form-control " id="location" value="BDO" placeholder="e.g. Office A, Warehouse B">
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmDeploy">Confirm Deployment</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            ...
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Understood</button>
-        </div>
-        </div>
-    </div>
     </div>
 
 </body>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+       
+        document.getElementById('assetTag').value = decodedText;
+
+         
+        alert("QR Scanned: " + decodedText);
+
+        
+        html5QrcodeScanner.clear();
+    }
+
+    function startScanner() {
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 }
+        );
+        html5QrcodeScanner.render(onScanSuccess);
+    }
+</script>
 </html>
