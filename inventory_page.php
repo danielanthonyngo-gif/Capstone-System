@@ -321,32 +321,82 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
         }
     }
 
+    // async function startScanner() {
+    //     const readerElement = document.getElementById("reader");
+    //     const placeholder = document.getElementById("reader-placeholder");
+    //     const statusBadge = document.getElementById("cameraStatus");
+    //     const btnText = document.getElementById("btnPowerText");
+
+    //     if (!html5QrCode) {
+    //         html5QrCode = new Html5Qrcode("reader");
+    //     }
+
+    //     try {
+    //         placeholder.classList.add('d-none');
+    //         await html5QrCode.start(
+    //             { facingMode: currentFacingMode }, 
+    //             { fps: 15, qrbox: { width: 200, height: 200 } },
+    //             onScanSuccess
+    //         );
+            
+    //         isScanning = true;
+    //         statusBadge.innerText = "Live";
+    //         statusBadge.className = "badge bg-success";
+    //         btnText.innerText = "Stop";
+    //     } catch (err) {
+    //         console.error("Camera access failed", err);
+    //         alert("Camera error: Check permissions.");
+    //         placeholder.classList.remove('d-none');
+    //     }
+    // }
+
+    // Palitan ang startScanner function ng ganito:
     async function startScanner() {
-        const readerElement = document.getElementById("reader");
-        const placeholder = document.getElementById("reader-placeholder");
         const statusBadge = document.getElementById("cameraStatus");
         const btnText = document.getElementById("btnPowerText");
+        const placeholder = document.getElementById("reader-placeholder");
+
+    
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+            alert("Camera access requires an HTTPS connection.");
+            return;
+        }
 
         if (!html5QrCode) {
             html5QrCode = new Html5Qrcode("reader");
         }
 
         try {
-            placeholder.classList.add('d-none');
+            statusBadge.innerText = "Requesting...";
+            
+
             await html5QrCode.start(
                 { facingMode: currentFacingMode }, 
-                { fps: 15, qrbox: { width: 200, height: 200 } },
+                { 
+                    fps: 10, 
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0  
+                },
                 onScanSuccess
             );
             
+            placeholder.classList.add('d-none');
             isScanning = true;
             statusBadge.innerText = "Live";
             statusBadge.className = "badge bg-success";
             btnText.innerText = "Stop";
+
         } catch (err) {
-            console.error("Camera access failed", err);
-            alert("Camera error: Check permissions.");
-            placeholder.classList.remove('d-none');
+            console.error("Camera error:", err);
+            statusBadge.innerText = "Denied";
+            statusBadge.className = "badge bg-danger";
+            
+            
+            if (err.name === "NotAllowedError") {
+                alert("Permission denied. Please enable camera in your browser settings.");
+            } else {
+                alert("Camera error: " + err);
+            }
         }
     }
 
@@ -364,10 +414,8 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
     function onScanSuccess(decodedText, decodedResult) {
         document.getElementById('assetTag').value = decodedText;
         
-        // Haptic feedback (if mobile)
         if (navigator.vibrate) navigator.vibrate(100);
-        
-        // Optional: Auto-stop after success
+    
         stopScanner();
     }
 
