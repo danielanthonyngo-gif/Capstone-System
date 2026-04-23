@@ -18,9 +18,12 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tracking | <?php echo $location; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <style>
         body { background-color: #f4f0ec; font-family: 'Segoe UI', sans-serif; }
         .top-nav { background: #3b1845; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; }
@@ -163,7 +166,11 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
     <div class="container-fluid p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="d-flex gap-2">
-                <button class="btn btn-purple btn-sm">+ New</button>
+                <!-- <button class="btn btn-purple btn-sm">+ New</button> -->
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    + New
+                </button>
                 <button class="btn btn-success btn-sm"><i class="fas fa-file-export me-1"></i> Export</button>
                 <a href="view_area.php" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back to Areas</a>
             </div>
@@ -173,8 +180,8 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
         </div>
 
         <div class="d-flex gap-3 mb-4">
-            <div class="stat-card bg-primary text-uppercase" style="background-color: #1a6fd3 !important;"><small>Replacement</small><h3 class="m-0"><?php echo $replacement; ?></h3></div>
-            <div class="stat-card bg-danger text-uppercase"><small>Disposal</small><h3 class="m-0"><?php echo $disposal; ?></h3></div>
+            <!-- <div class="stat-card bg-primary text-uppercase" style="background-color: #1a6fd3 !important;"><small>Replacement</small><h3 class="m-0"><?php echo $replacement; ?></h3></div> -->
+            <!-- <div class="stat-card bg-danger text-uppercase"><small>Disposal</small><h3 class="m-0"><?php echo $disposal; ?></h3></div> -->
             <div class="stat-card bg-success text-uppercase"><small>Active</small><h3 class="m-0"><?php echo $active; ?></h3></div>
         </div>
 
@@ -191,7 +198,7 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
                         <th>Type</th>
                         <th>Year/Model</th>
                         <th>Location</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -205,8 +212,8 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
                         <td>Desktop</td>
                         <td>2020--2023</td>
                         <td><?php echo $row['location']; ?></td>
-                        <td><span class="badge bg-success opacity-75"><?php echo $row['status']; ?></span></td>
-                        <td><button class="btn btn-xs btn-purple py-0 px-2" style="font-size: 0.7rem;">Edit</button></td>
+                        <!-- <td><span class="badge bg-success opacity-75"><?php echo $row['status']; ?></span></td> -->
+                        <td><button class="btn btn-xs btn-purple py-0 px-2" style="font-size: 0.7rem;">Pullout</button></td>
                     </tr>
                     <?php endwhile; ?>
                     
@@ -215,6 +222,25 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Understood</button>
+        </div>
         </div>
     </div>
     </div>
