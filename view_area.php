@@ -60,16 +60,7 @@ $other_areas = [
 </head>
 <body>
 
-<aside class="sidebar">
-    <div class="brand"><i class="fas fa-cube me-2"></i>INSPIRO</div>
-    <nav class="mt-2">
-        <a href="dashboard.php" class="nav-item"><i class="fas fa-th-large me-3"></i>Dashboard</a>
-        <a href="view_area.php" class="nav-item active"><i class="fas fa-map-marker-alt me-3"></i>View Areas</a>
-        <a href="view_inventory.php" class="nav-item"><i class="fas fa-boxes me-3"></i>View Inventory</a>
-        <a href="create_item.php" class="nav-item"><i class="fas fa-plus-circle me-3"></i>Create Item</a>
-        <a href="manage_user.php" class="nav-item"><i class="fas fa-users me-3"></i>Manage Users</a>
-    </nav>
-</aside>
+<?php include 'aside.php'; ?>
 
 <div class="content">
     <nav class="top-nav">

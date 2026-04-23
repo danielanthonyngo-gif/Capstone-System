@@ -28,73 +28,196 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
         .btn-purple { background: #8e44ad; color: white; }
         .btn-purple:hover { background: #732d91; color: white; }
     </style>
+
+    <style>
+        :root { 
+            --primary-purple: #6f42c1; 
+            --deep-purple: #3b1845;
+            --accent-red: #dc3545;
+            --bg-light: #f0f2f5;
+            --sidebar-width: 260px;
+        }
+
+        body { 
+            background-color: var(--bg-light); 
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            background: var(--deep-purple);
+            color: white;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .brand-section {
+            padding: 25px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .nav-menu { padding: 20px 0; }
+        .nav-item {
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid #a29bfe;
+        }
+
+        .content-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn-logout {
+            background: #fff5f5;
+            color: var(--accent-red);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 1px solid #ffe3e3;
+        }
+        .btn-logout:hover { background: var(--accent-red); color: white; }
+
+        .dashboard-container { padding: 30px; }
+        
+        .welcome-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary-purple);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .status-card {
+            border: none;
+            border-radius: 15px;
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        .card-icon { font-size: 2rem; opacity: 0.3; position: absolute; right: 20px; bottom: 20px; }
+
+        .calendar-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .current-day {
+            background-color: var(--primary-purple) !important;
+            color: white !important;
+            padding: 8px 14px;
+            border-radius: 50%;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(111, 66, 193, 0.4);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { display: none; }
+            .content-wrapper { margin-left: 0; }
+        }
+    </style>
 </head>
 <body>
-
-<div class="top-nav">
-    <div class="fw-bold fs-5">
-        <a href="view_area.php" class="text-white text-decoration-none">inspiro <i class="fas fa-home ms-1"></i></a>
-    </div>
-    <div class="small">Welcome, <strong>Jayson Mateo</strong> | <a href="logout.php" class="text-white text-decoration-none">Logout</a></div>
-</div>
-
-<div class="container-fluid p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex gap-2">
-            <button class="btn btn-purple btn-sm">+ New</button>
-            <button class="btn btn-success btn-sm"><i class="fas fa-file-export me-1"></i> Export</button>
-            <a href="view_area.php" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back to Areas</a>
-        </div>
-        <div class="w-25">
-            <input type="text" class="form-control form-control-sm" placeholder="Search asset tag or serial...">
-        </div>
-    </div>
-
-    <div class="d-flex gap-3 mb-4">
-        <div class="stat-card bg-primary text-uppercase" style="background-color: #1a6fd3 !important;"><small>Replacement</small><h3 class="m-0"><?php echo $replacement; ?></h3></div>
-        <div class="stat-card bg-danger text-uppercase"><small>Disposal</small><h3 class="m-0"><?php echo $disposal; ?></h3></div>
-        <div class="stat-card bg-success text-uppercase"><small>Active</small><h3 class="m-0"><?php echo $active; ?></h3></div>
-    </div>
-
-    <h5 class="fw-bold mb-3"><?php echo htmlspecialchars($location); ?></h5>
+    <?php include 'aside.php'; ?>
     
-    <div class="bg-white rounded shadow-sm overflow-hidden">
-        <table class="table table-hover mb-0">
-            <thead style="background: #3b1845; color: white;">
-                <tr class="small">
-                    <th>Inventory Date</th>
-                    <th>Asset Tag</th>
-                    <th>Serial Number</th>
-                    <th>Brand/Model</th>
-                    <th>Type</th>
-                    <th>Year/Model</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="small">
-                <?php while($row = mysqli_fetch_assoc($assets)): ?>
-                <tr>
-                    <td>4/18/2026</td>
-                    <td><strong><?php echo $row['asset_tag']; ?></strong></td>
-                    <td><?php echo $row['serial_number']; ?></td>
-                    <td><?php echo $row['brand_model']; ?></td>
-                    <td>Desktop</td>
-                    <td>2020--2023</td>
-                    <td><?php echo $row['location']; ?></td>
-                    <td><span class="badge bg-success opacity-75"><?php echo $row['status']; ?></span></td>
-                    <td><button class="btn btn-xs btn-purple py-0 px-2" style="font-size: 0.7rem;">Edit</button></td>
-                </tr>
-                <?php endwhile; ?>
-                
-                <?php if(mysqli_num_rows($assets) == 0): ?>
-                <tr><td colspan="9" class="text-center py-4 text-muted">No assets found for this location.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+<div class="content-wrapper">
+    <div class="top-nav">
+        <div class="fw-bold fs-5">
+            <a href="view_area.php" class="text-white text-decoration-none">inspiro <i class="fas fa-home ms-1"></i></a>
+        </div>
+        <div class="small">Welcome, <strong>Jayson Mateo</strong> | <a href="logout.php" class="text-white text-decoration-none">Logout</a></div>
     </div>
-</div>
+
+    <div class="container-fluid p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex gap-2">
+                <button class="btn btn-purple btn-sm">+ New</button>
+                <button class="btn btn-success btn-sm"><i class="fas fa-file-export me-1"></i> Export</button>
+                <a href="view_area.php" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back to Areas</a>
+            </div>
+            <div class="w-25">
+                <input type="text" class="form-control form-control-sm" placeholder="Search asset tag or serial...">
+            </div>
+        </div>
+
+        <div class="d-flex gap-3 mb-4">
+            <div class="stat-card bg-primary text-uppercase" style="background-color: #1a6fd3 !important;"><small>Replacement</small><h3 class="m-0"><?php echo $replacement; ?></h3></div>
+            <div class="stat-card bg-danger text-uppercase"><small>Disposal</small><h3 class="m-0"><?php echo $disposal; ?></h3></div>
+            <div class="stat-card bg-success text-uppercase"><small>Active</small><h3 class="m-0"><?php echo $active; ?></h3></div>
+        </div>
+
+        <h5 class="fw-bold mb-3"><?php echo htmlspecialchars($location); ?></h5>
+        
+        <div class="bg-white rounded shadow-sm overflow-hidden">
+            <table class="table table-hover mb-0">
+                <thead style="background: #3b1845; color: white;">
+                    <tr class="small">
+                        <th>Inventory Date</th>
+                        <th>Asset Tag</th>
+                        <th>Serial Number</th>
+                        <th>Brand/Model</th>
+                        <th>Type</th>
+                        <th>Year/Model</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    <?php while($row = mysqli_fetch_assoc($assets)): ?>
+                    <tr>
+                        <td>4/18/2026</td>
+                        <td><strong><?php echo $row['asset_tag']; ?></strong></td>
+                        <td><?php echo $row['serial_number']; ?></td>
+                        <td><?php echo $row['brand_model']; ?></td>
+                        <td>Desktop</td>
+                        <td>2020--2023</td>
+                        <td><?php echo $row['location']; ?></td>
+                        <td><span class="badge bg-success opacity-75"><?php echo $row['status']; ?></span></td>
+                        <td><button class="btn btn-xs btn-purple py-0 px-2" style="font-size: 0.7rem;">Edit</button></td>
+                    </tr>
+                    <?php endwhile; ?>
+                    
+                    <?php if(mysqli_num_rows($assets) == 0): ?>
+                    <tr><td colspan="9" class="text-center py-4 text-muted">No assets found for this location.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
 
 </body>
 </html>

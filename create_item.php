@@ -11,6 +11,8 @@ $dbname = "database";
 
 $conn = mysqli_connect($host, $db_user, $db_pass, $dbname);
 
+
+
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
@@ -27,6 +29,14 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
+$location = isset($_GET['location']) ? mysqli_real_escape_string($conn, $_GET['location']) : 'BDO';
+
+
+$active = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as t FROM assets WHERE location = '$location' AND status = 'Active'"))['t'] ?? 0;
+$disposal = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as t FROM assets WHERE location = '$location' AND status = 'For Disposal'"))['t'] ?? 0;
+$replacement = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as t FROM assets WHERE location = '$location' AND status = 'Replacement'"))['t'] ?? 0;
+
+$assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'");
 
 $message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -95,16 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<aside class="sidebar">
-    <div class="brand-section"><i class="fas fa-cube me-2"></i> INSPIRO</div>
-    <nav class="nav-menu">
-        <a href="dashboard.php" class="nav-item"><i class="fas fa-th-large"></i> Dashboard</a>
-        <a href="view_area.php" class="nav-item"><i class="fas fa-map-marker-alt"></i> View Areas</a>
-        <a href="view_inventory.php" class="nav-item"><i class="fas fa-boxes"></i> View Inventory</a>
-        <a href="create_item.php" class="nav-item active"><i class="fas fa-plus-circle"></i> Create Item</a>
-        <a href="manage_user.php" class="nav-item"><i class="fas fa-users-cog"></i> Manage Users</a>
-    </nav>
-</aside>
+<?php include 'aside.php'; ?>
 
 <div class="content-wrapper">
     <nav class="top-navbar">
@@ -180,6 +181,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a href="view_inventory.php" class="btn-cancel">Cancel</a>
                 </div>
             </form>
+        </div>
+
+           <div class="bg-white rounded shadow-sm overflow-hidden">
+            <table class="table table-hover mb-0">
+                <thead style="background: #3b1845; color: white;">
+                    <tr class="small">
+                        <th>Inventory Date</th>
+                        <th>Asset Tag</th>
+                        <th>Serial Number</th>
+                        <th>Brand/Model</th>
+                        <th>Type</th>
+                        <th>Year/Model</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    <?php while($row = mysqli_fetch_assoc($assets)): ?>
+                    <tr>
+                        <td>4/18/2026</td>
+                        <td><strong><?php echo $row['asset_tag']; ?></strong></td>
+                        <td><?php echo $row['serial_number']; ?></td>
+                        <td><?php echo $row['brand_model']; ?></td>
+                        <td>Desktop</td>
+                        <td>2020--2023</td>
+                        <td><?php echo $row['location']; ?></td>
+                        <td><span class="badge bg-success opacity-75"><?php echo $row['status']; ?></span></td>
+                        <td><button class="btn btn-xs btn-purple py-0 px-2" style="font-size: 0.7rem;">Edit</button></td>
+                    </tr>
+                    <?php endwhile; ?>
+                    
+                    <?php if(mysqli_num_rows($assets) == 0): ?>
+                    <tr><td colspan="9" class="text-center py-4 text-muted">No assets found for this location.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
