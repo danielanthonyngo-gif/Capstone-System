@@ -1,14 +1,6 @@
 <?php
 session_start(); 
-
-
-$db_name = 'database'; 
-$conn = mysqli_connect("localhost", "root", "", $db_name);
-
-if (!$conn) {
-    die("Koneksyon Error: " . mysqli_connect_error());
-}
-
+include 'config.php';
 
 $display_name = "Guest"; 
 if (isset($_SESSION['user_id'])) {

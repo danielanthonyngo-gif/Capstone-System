@@ -1,17 +1,6 @@
 <?php
 session_start();
-
-
-$host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$dbname = "database"; 
-
-$conn = mysqli_connect($host, $db_user, $db_pass, $dbname);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+include 'config.php';
 
 
 $display_name = "Guest"; 
