@@ -7,6 +7,8 @@ $db_user = "root";
 $db_pass = "";
 $dbname = "database";
 
+//comment
+
 $conn = mysqli_connect($host, $db_user, $db_pass, $dbname);
 
 if (!$conn) {
