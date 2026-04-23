@@ -228,163 +228,163 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
     </div>
 
     <!-- Modal -->
-<div class="modal fade" id="deployAssetModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deployAssetLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0">
-            <div class="modal-header text-white" style="background-color: #3b1845;">
-                <h1 class="modal-title fs-5" id="deployAssetLabel">
-                    <i class="bi bi-qr-code-scan me-2"></i>Deploy New Asset
-                </h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+    <div class="modal fade" id="deployAssetModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deployAssetLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header text-white" style="background-color: #3b1845;">
+                    <h1 class="modal-title fs-5" id="deployAssetLabel">
+                        <i class="bi bi-qr-code-scan me-2"></i>Deploy New Asset
+                    </h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <div class="modal-body p-4">
-                <div class="row g-4">
-                    <div class="col-md-6 border-end">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label class="form-label fw-bold mb-0">Scan QR Code</label>
-                            <span id="cameraStatus" class="badge bg-secondary">Inactive</span>
-                        </div>
-                        
-                        <div class="position-relative">
-                            <div id="reader" class="rounded border bg-light d-flex align-items-center justify-content-center overflow-hidden" style="width: 100%; min-height: 280px;">
-                                <div class="text-center p-3 text-muted" id="reader-placeholder">
-                                    <i class="bi bi-camera-fill fs-1 d-block mb-2"></i>
-                                    <span>Ready to Scan</span>
+                <div class="modal-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6 border-end">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-bold mb-0">Scan QR Code</label>
+                                <span id="cameraStatus" class="badge bg-secondary">Inactive</span>
+                            </div>
+                            
+                            <div class="position-relative">
+                                <div id="reader" class="rounded border bg-light d-flex align-items-center justify-content-center overflow-hidden" style="width: 100%; min-height: 280px;">
+                                    <div class="text-center p-3 text-muted" id="reader-placeholder">
+                                        <i class="bi bi-camera-fill fs-1 d-block mb-2"></i>
+                                        <span>Ready to Scan</span>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div class="mt-3">
+                                <div class="btn-group w-100 shadow-sm" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="toggleCamera()">
+                                        <i class="bi bi-power"></i> <span id="btnPowerText">Start</span>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="switchCamera()">
+                                        <i class="bi bi-camera-reversing"></i> Switch
+                                    </button>
+                                </div>
+                                <small class="text-muted d-block mt-2 text-center">
+                                    <i class="bi bi-info-circle"></i> Point the camera at the asset's QR code.
+                                </small>
+                            </div>
                         </div>
 
-                        <div class="mt-3">
-                            <div class="btn-group w-100 shadow-sm" role="group">
-                                <button type="button" class="btn btn-primary" onclick="toggleCamera()">
-                                    <i class="bi bi-power"></i> <span id="btnPowerText">Start</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-primary" onclick="switchCamera()">
-                                    <i class="bi bi-camera-reversing"></i> Switch
-                                </button>
-                            </div>
-                            <small class="text-muted d-block mt-2 text-center">
-                                <i class="bi bi-info-circle"></i> Point the camera at the asset's QR code.
-                            </small>
+                        <div class="col-md-6">
+                            <form id="deployForm">
+                                <div class="mb-3">
+                                    <label for="assetTag" class="form-label fw-bold">Asset Tag / Serial</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
+                                        <input type="text" class="form-control bg-light fw-bold text-primary" id="assetTag" placeholder="Waiting for scan..." readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="equipmentName" class="form-label fw-bold">Equipment Name</label>
+                                    <input type="text" class="form-control border-2" id="equipmentName" placeholder="e.g. Dell Latitude 5420">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="location" class="form-label fw-bold">Location</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+                                        <input readonly type="text" class="form-control" id="location" value="BDO Main Office">
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <form id="deployForm">
-                            <div class="mb-3">
-                                <label for="assetTag" class="form-label fw-bold">Asset Tag / Serial</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
-                                    <input type="text" class="form-control bg-light fw-bold text-primary" id="assetTag" placeholder="Waiting for scan..." readonly>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="equipmentName" class="form-label fw-bold">Equipment Name</label>
-                                <input type="text" class="form-control border-2" id="equipmentName" placeholder="e.g. Dell Latitude 5420">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="location" class="form-label fw-bold">Location</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
-                                    <input readonly type="text" class="form-control" id="location" value="BDO Main Office">
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal-footer bg-light border-0">
-                <button type="button" class="btn btn-link text-decoration-none text-muted" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary px-4 shadow-sm" id="confirmDeploy" style="background-color: #3b1845; border: none;">
-                    Confirm Deployment
-                </button>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-link text-decoration-none text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4 shadow-sm" id="confirmDeploy" style="background-color: #3b1845; border: none;">
+                        Confirm Deployment
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
 
 <script>
     let html5QrCode;
-let currentFacingMode = "environment"; // Default is back camera
-let isScanning = false;
+    let currentFacingMode = "environment"; // Default is back camera
+    let isScanning = false;
 
-function toggleCamera() {
-    if (!isScanning) {
-        startScanner();
-    } else {
+    function toggleCamera() {
+        if (!isScanning) {
+            startScanner();
+        } else {
+            stopScanner();
+        }
+    }
+
+    async function startScanner() {
+        const readerElement = document.getElementById("reader");
+        const placeholder = document.getElementById("reader-placeholder");
+        const statusBadge = document.getElementById("cameraStatus");
+        const btnText = document.getElementById("btnPowerText");
+
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
+
+        try {
+            placeholder.classList.add('d-none');
+            await html5QrCode.start(
+                { facingMode: currentFacingMode }, 
+                { fps: 15, qrbox: { width: 200, height: 200 } },
+                onScanSuccess
+            );
+            
+            isScanning = true;
+            statusBadge.innerText = "Live";
+            statusBadge.className = "badge bg-success";
+            btnText.innerText = "Stop";
+        } catch (err) {
+            console.error("Camera access failed", err);
+            alert("Camera error: Check permissions.");
+            placeholder.classList.remove('d-none');
+        }
+    }
+
+    async function stopScanner() {
+        if (html5QrCode && isScanning) {
+            await html5QrCode.stop();
+            isScanning = false;
+            document.getElementById("cameraStatus").innerText = "Inactive";
+            document.getElementById("cameraStatus").className = "badge bg-secondary";
+            document.getElementById("btnPowerText").innerText = "Start";
+            document.getElementById("reader-placeholder").classList.remove('d-none');
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        document.getElementById('assetTag').value = decodedText;
+        
+        // Haptic feedback (if mobile)
+        if (navigator.vibrate) navigator.vibrate(100);
+        
+        // Optional: Auto-stop after success
         stopScanner();
     }
-}
 
-async function startScanner() {
-    const readerElement = document.getElementById("reader");
-    const placeholder = document.getElementById("reader-placeholder");
-    const statusBadge = document.getElementById("cameraStatus");
-    const btnText = document.getElementById("btnPowerText");
-
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
-    }
-
-    try {
-        placeholder.classList.add('d-none');
-        await html5QrCode.start(
-            { facingMode: currentFacingMode }, 
-            { fps: 15, qrbox: { width: 200, height: 200 } },
-            onScanSuccess
-        );
+    async function switchCamera() {
+        currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
         
-        isScanning = true;
-        statusBadge.innerText = "Live";
-        statusBadge.className = "badge bg-success";
-        btnText.innerText = "Stop";
-    } catch (err) {
-        console.error("Camera access failed", err);
-        alert("Camera error: Check permissions.");
-        placeholder.classList.remove('d-none');
+        if (isScanning) {
+            await stopScanner();
+            await startScanner();
+        } else {
+            alert("Camera switched to: " + (currentFacingMode === "user" ? "Front" : "Back"));
+        }
     }
-}
 
-async function stopScanner() {
-    if (html5QrCode && isScanning) {
-        await html5QrCode.stop();
-        isScanning = false;
-        document.getElementById("cameraStatus").innerText = "Inactive";
-        document.getElementById("cameraStatus").className = "badge bg-secondary";
-        document.getElementById("btnPowerText").innerText = "Start";
-        document.getElementById("reader-placeholder").classList.remove('d-none');
-    }
-}
-
-function onScanSuccess(decodedText, decodedResult) {
-    document.getElementById('assetTag').value = decodedText;
     
-    // Haptic feedback (if mobile)
-    if (navigator.vibrate) navigator.vibrate(100);
-    
-    // Optional: Auto-stop after success
-    stopScanner();
-}
-
-async function switchCamera() {
-    currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
-    
-    if (isScanning) {
-        await stopScanner();
-        await startScanner();
-    } else {
-        alert("Camera switched to: " + (currentFacingMode === "user" ? "Front" : "Back"));
-    }
-}
-
-// Siguraduhin na mamatay ang camera pag sinara ang modal
-document.getElementById('deployAssetModal').addEventListener('hidden.bs.modal', function () {
-    stopScanner();
-});
+    document.getElementById('deployAssetModal').addEventListener('hidden.bs.modal', function () {
+        stopScanner();
+    });
 </script>
 </html>
