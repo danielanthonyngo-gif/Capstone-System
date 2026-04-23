@@ -16,7 +16,7 @@ if (isset($_POST['login'])) {
             $_SESSION['user'] = $user['fullname'];
             $_SESSION['user_id'] = $user['id'];
 
-            header("Location: dashboard.php");
+            header("Location: index.php");
             exit(); 
         } else {
             $error_msg = "Maling password! Subukan ulit.";
