@@ -113,7 +113,7 @@ if (isset($_POST['register'])) {
                     
                     <div class="text-center mt-3">
                         <small>May account na? <a href="login.php" class="text-decoration-none fw-bold text-purple">Mag-login dito</a></small>
-                    </div>
+                    </div>s
                 </div>
             </div>
         </div>
