@@ -2,17 +2,14 @@
 session_start();
 include 'config.php';
 
-
 $display_name = "Guest"; 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    // Tracking 'fullname' from the users table
     $user_query = mysqli_query($conn, "SELECT fullname FROM users WHERE id = '$user_id' LIMIT 1");
     if ($row = mysqli_fetch_assoc($user_query)) {
         $display_name = $row['fullname'];
     }
 }
-
 
 if (isset($_POST['update_asset'])) {
     $id = mysqli_real_escape_string($conn, $_POST['asset_id']);
@@ -30,11 +27,9 @@ if (isset($_POST['update_asset'])) {
     }
 }
 
-
 $count_replacement = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM assets WHERE status='Replacement'"))['total'];
 $count_disposal = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM assets WHERE status='For Disposal'"))['total'];
 $count_active = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM assets WHERE status='Active'"))['total'];
-
 
 $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
 ?>
@@ -49,38 +44,38 @@ $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         :root { --deep-purple: #3b1845; --bg-cream: #f4f0e6; --sidebar-width: 260px; }
         body { background-color: var(--bg-cream); font-family: 'Inter', sans-serif; }
-        
         .sidebar { width: var(--sidebar-width); height: 100vh; position: fixed; background: var(--deep-purple); color: white; z-index: 1000; }
         .brand-section { padding: 25px; font-size: 1.5rem; font-weight: 700; background: rgba(0,0,0,0.2); text-align: center; }
         .nav-menu { padding: 20px 0; }
         .nav-item { padding: 12px 25px; display: flex; align-items: center; color: rgba(255,255,255,0.7); text-decoration: none; transition: 0.3s; }
         .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid #a29bfe; }
         .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
-        
         .content-wrapper { margin-left: var(--sidebar-width); min-height: 100vh; }
-        /* MASTER: Binago ko ang color dito para mag-match sa sidebar */
         .top-navbar { background-color: var(--deep-purple); padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .top-navbar a { color: #d1d1d1; text-decoration: none; margin-right: 20px; font-size: 0.9rem; }
-        
         .inventory-container { padding: 30px; }
         .status-summary { display: flex; gap: 15px; margin-bottom: 25px; }
         .summary-card { padding: 10px 25px; border-radius: 8px; color: white; display: flex; flex-direction: column; align-items: center; min-width: 140px; }
         .bg-replacement { background-color: #0d6efd; }
         .bg-disposal { background-color: #dc3545; }
         .bg-active { background-color: #198754; }
-        
         .table-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .custom-table thead { background-color: var(--deep-purple); color: white; }
-        
         .modal-content { background-color: #ffffff !important; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .badge-active { background-color: #d1e7dd; color: #0f5132; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
         .badge-disposal { background-color: #f8d7da; color: #842029; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
         .badge-replacement { background-color: #cfe2ff; color: #084298; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
-        
         .qr-display-container { background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; padding: 15px; }
+        
+        /* New Search Style */
+        .search-control { border-radius: 20px; padding-left: 40px; }
+        .search-wrapper { position: relative; width: 300px; }
+        .search-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa; }
     </style>
 </head>
 <body>
@@ -104,13 +99,19 @@ $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold m-0" style="color: var(--deep-purple);">INVENTORY LIST</h5>
-            <button onclick="exportToExcel()" class="btn btn-success shadow-sm">
-                <i class="fas fa-file-excel me-2"></i> Export to Excel
+            <div class="d-flex align-items-center gap-3">
+                <h5 class="fw-bold m-0" style="color: var(--deep-purple);">INVENTORY LIST</h5>
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="assetSearch" class="form-control search-control" placeholder="Search assets...">
+                </div>
+            </div>
+            <button onclick="exportToPDF()" class="btn btn-danger shadow-sm">
+                <i class="fas fa-file-pdf me-2"></i> Export to PDF
             </button>
         </div>
 
-        <div class="table-card">
+        <div class="table-card" id="pdfContent">
             <table id="inventoryTable" class="table table-hover custom-table mb-0 text-center">
                 <thead>
                     <tr>
@@ -123,7 +124,7 @@ $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
                         <th class="no-export">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="inventoryBody">
                     <?php while($row = mysqli_fetch_assoc($assets_result)): 
                         $statusClass = 'badge-active';
                         if($row['status'] == 'For Disposal') $statusClass = 'badge-disposal';
@@ -216,28 +217,37 @@ $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-function exportToExcel() {
-    const table = document.getElementById("inventoryTable");
-    let html = table.outerHTML;
+// Search Functionality
+document.getElementById('assetSearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll('#inventoryBody tr');
     
-    html = html.replace(/<th class="no-export">.*?<\/th>/g, "");
-    html = html.replace(/<td class="no-export">.*?<\/td>/g, "");
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+    });
+});
 
-    const uri = 'data:application/vnd.ms-excel;base64,';
-    const template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>';
+// Export to PDF Functionality
+function exportToPDF() {
+    const element = document.getElementById("pdfContent");
+    const actions = document.querySelectorAll('.no-export');
     
-    const base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) };
-    const format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) };
+    // Hide actions before capturing
+    actions.forEach(el => el.style.display = 'none');
 
-    const ctx = {
-        worksheet: 'Inventory Report',
-        table: html
+    const opt = {
+        margin: 0.5,
+        filename: 'Inspiro_Inventory_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
     };
 
-    const link = document.createElement("a");
-    link.href = uri + base64(format(template, ctx));
-    link.download = "Inspiro_Inventory_Report.xls";
-    link.click();
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Show actions back
+        actions.forEach(el => el.style.display = '');
+    });
 }
 </script>
 
