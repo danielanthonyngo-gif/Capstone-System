@@ -177,7 +177,7 @@ $count_replacement = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as 
 
     <div class="dashboard-container">
         <div class="welcome-card">
-            <h2 class="m-0">Welcome back, <span class="text-danger fw-bold"><?php echo htmlspecialchars($display_name); ?>!</span></h2>
+            <h2 class="m-0"><b>Welcome back,</b> <span class="text-danger fw-bold"><?php echo htmlspecialchars($display_name); ?>!</span></h2>
             <p class="text-muted mb-0">Today is <strong><?php echo date('l, F j, Y'); ?></strong></p>
         </div>
 

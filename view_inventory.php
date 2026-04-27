@@ -61,15 +61,15 @@ $assets_result = mysqli_query($conn, "SELECT * FROM assets ORDER BY id DESC");
         .inventory-container { padding: 30px; }
         .status-summary { display: flex; gap: 15px; margin-bottom: 25px; }
         .summary-card { padding: 10px 25px; border-radius: 8px; color: white; display: flex; flex-direction: column; align-items: center; min-width: 140px; }
-        .bg-replacement { background-color: #0d6efd; }
+        .bg-replacement { background-color: #fffff; }
         .bg-disposal { background-color: #dc3545; }
         .bg-active { background-color: #198754; }
         .table-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .custom-table thead { background-color: var(--deep-purple); color: white; }
-        .modal-content { background-color: #ffffff !important; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-content { background-color: rgb(255, 255, 255) !important; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .badge-active { background-color: #d1e7dd; color: #0f5132; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
         .badge-disposal { background-color: #f8d7da; color: #842029; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
-        .badge-replacement { background-color: #cfe2ff; color: #084298; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+        .badge-replacement { background-color: #cfe2ff; color: #ffffff; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
         .qr-display-container { background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 8px; padding: 15px; }
         
         /* New Search Style */

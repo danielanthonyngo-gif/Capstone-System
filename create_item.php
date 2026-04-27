@@ -42,7 +42,7 @@ $display_name = $_SESSION['user'] ?? "Master";
             color: #b19db9; text-decoration: none; transition: 0.3s; 
         }
         .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid #007bff; }
-        .nav-item i { margin-right: 15px; color: #007bff; width: 20px; text-align: center; }
+        .nav-item i { margin-right: 15px; color: #fffff; width: 20px; text-align: center; }
 
         /* MAIN CONTENT STYLE - Ito ang nag-aayos ng pwesto */
         .main-wrapper {
