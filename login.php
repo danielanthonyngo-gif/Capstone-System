@@ -1,12 +1,12 @@
 <?php
-include 'config.php';
 session_start();
+include 'config.php';
 
 if (isset($_POST['login'])) {
-    $username = $_POST['username'];
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];
 
-    // Query sa database
+    // In-update ang query para siguradong makuha ang 'role'
     $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
     $user = mysqli_fetch_assoc($result);
 
@@ -15,6 +15,10 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['fullname'];
             $_SESSION['user_id'] = $user['id'];
+            
+            // --- ETO YUNG IMPORTANTE NA NASA PICTURE MO MASTER ---
+            $_SESSION['role'] = $user['role']; 
+            // -----------------------------------------------------
 
             header("Location: index.php");
             exit(); 
@@ -32,36 +36,26 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login Page | Inspiro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --brand-purple: #6f42c1; /* Classic Purple */
-            --dark-purple: #321b5c;  /* Darker Purple for Background */
-            --hover-purple: #59359a; /* Hover state */
+            --brand-purple: #6f42c1;
+            --dark-purple: #321b5c;
+            --hover-purple: #59359a;
         }
         body {
-            /* Dark Purple Background */
             background: var(--dark-purple);
             font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
         }
-        /* //test */
-        /* sdffsdf */
         .login-card {
             margin-top: 100px;
             border: 1px solid #dee2e6;
             border-radius: 15px;
             background: #ffffff;
         }
-        .card-header {
-            /* Purple Header */
-            background-color: var(--brand-purple) !important;
-            border-radius: 15px 15px 0 0 !important;
-            border: none;
-        }
         .btn-purple {
-            /* Purple Button */
             background-color: var(--brand-purple);
             color: white;
             border: none;
@@ -75,7 +69,6 @@ if (isset($_POST['login'])) {
         .text-purple {
             color: var(--brand-purple) !important;
         }
-        /* Custom Focus Ring for Inputs */
         .form-control:focus {
             border-color: var(--brand-purple);
             box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
@@ -125,6 +118,8 @@ if (isset($_POST['login'])) {
                         <a href="register.php" class="text-purple text-decoration-none fw-bold">Sign Up</a>
                     </small>
                 </div> -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>

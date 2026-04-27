@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$dbname = "database";
+$dbname ="rod";
 
 $conn = mysqli_connect($host,$user, $pass, $dbname );
 

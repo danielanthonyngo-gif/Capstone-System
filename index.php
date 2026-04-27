@@ -1,13 +1,6 @@
 <?php
 session_start();
-//test
-
-$host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$dbname = "database"; 
-
-$conn = mysqli_connect($host, $db_user, $db_pass, $dbname);
+include 'config.php';
 
 if (!$conn) {
     die("<div style='color:red; padding:20px;'>Master, mali ang database settings mo: " . mysqli_connect_error() . "</div>");
