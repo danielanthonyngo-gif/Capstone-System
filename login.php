@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Dagdag ito para sa smooth redirection
 session_start();
 include 'config.php';
 
@@ -6,19 +7,15 @@ if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];
 
-    // In-update ang query para siguradong makuha ang 'role'
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
+    $result = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' LIMIT 1");
     $user = mysqli_fetch_assoc($result);
 
     if ($user) {
-        // I-check kung tama ang hashed password
+        // Ito ang magche-check sa mahabang hash sa database vs sa tinype ni user
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['fullname'];
             $_SESSION['user_id'] = $user['id'];
-            
-            // --- ETO YUNG IMPORTANTE NA NASA PICTURE MO MASTER ---
             $_SESSION['role'] = $user['role']; 
-            // -----------------------------------------------------
 
             header("Location: index.php");
             exit(); 

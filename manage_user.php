@@ -16,11 +16,18 @@ if (isset($_SESSION['user_id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user_submit'])) {
     $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
+    
+    // MASTER: Dito natin i-hash ang password
     $password = mysqli_real_escape_string($conn, $_POST['password']); 
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
     $role     = mysqli_real_escape_string($conn, $_POST['role']);
     $status   = "Active";
 
-    $sql = "INSERT INTO users (fullname, username, password, role, status) VALUES ('$fullname', '$username', '$password', '$role', '$status')";
+    // Gamitin ang $hashed_password sa INSERT query
+    $sql = "INSERT INTO users (fullname, username, password, role, status) 
+            VALUES ('$fullname', '$username', '$hashed_password', '$role', '$status')";
+    
     if (mysqli_query($conn, $sql)) {
         echo "<script>alert('User Added Successfully!'); window.location='manage_user.php';</script>";
     }
