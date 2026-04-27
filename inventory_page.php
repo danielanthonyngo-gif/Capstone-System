@@ -47,7 +47,7 @@ $assets = mysqli_query($conn, "SELECT * FROM assets WHERE location = '$location'
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-                //sasasas
+                
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;

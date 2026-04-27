@@ -6,7 +6,7 @@ if (!$conn) {
     die("<div style='color:red; padding:20px;'>Master, mali ang database settings mo: " . mysqli_connect_error() . "</div>");
 }
 
-// asassa
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
