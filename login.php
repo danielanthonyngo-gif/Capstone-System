@@ -116,15 +116,15 @@ if (isset($_POST['login'])) {
                         </div>
                     </form>
 
-                    <div class="text-center mt-3">
+                    <!-- <div class="text-center mt-3">
                         <small class="text-muted">Forgot Password?</small> 
                         <a href="#" class="text-purple text-decoration-none fw-bold">Click here</a>
-                    </div>
-                <div class="card-footer text-center py-3 bg-transparent border-0">
+                    </div> -->
+                <!-- <div class="card-footer text-center py-3 bg-transparent border-0">
                     <small class="text-muted">Don't have an account? 
                         <a href="register.php" class="text-purple text-decoration-none fw-bold">Sign Up</a>
                     </small>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
