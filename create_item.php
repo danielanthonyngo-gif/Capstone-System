@@ -1,16 +1,6 @@
 <?php
 session_start();
-
-
-$host = "localhost";
-$db_user = "root";
-$db_pass = "";
-$dbname = "database";
-
-//comment
-
-$conn = mysqli_connect($host, $db_user, $db_pass, $dbname);
-
+include 'config.php';
 
 
 if (!$conn) {
