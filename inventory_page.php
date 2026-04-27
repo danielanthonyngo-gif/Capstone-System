@@ -1,6 +1,6 @@
 <?php
 
-$db_name = 'database'; 
+$db_name = 'dbasset'; 
 $conn = mysqli_connect("localhost", "root", "", $db_name);
 
 $location = isset($_GET['location']) ? mysqli_real_escape_string($conn, $_GET['location']) : 'BDO';
