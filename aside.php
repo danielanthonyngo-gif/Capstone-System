@@ -65,7 +65,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         border-left: 4px solid transparent;
         font-size: 0.95rem;
     }
-
+//yes
     .nav-item i {
         margin-right: 15px;
         width: 25px;

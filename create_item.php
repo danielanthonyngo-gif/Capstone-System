@@ -2,7 +2,7 @@
 session_start();
 include 'config.php';
 
-// Security check - Siguraduhin na may role session para hindi ma-kick out
+// Security check - Siguraduhin na may role session para hindi ma-kick outaaaa
 if (!isset($_SESSION['role'])) {
     header("Location: login.php");
     exit();

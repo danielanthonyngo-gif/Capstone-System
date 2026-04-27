@@ -5,7 +5,7 @@ include 'config.php';
 $display_name = "Guest"; 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    // Ginamit natin ang 'fullname' base sa picture na sinend mo
+    // Ginamit natin ang 'fullname' base sa picture na sinend mosssssss
     $user_query = mysqli_query($conn, "SELECT fullname FROM users WHERE id = '$user_id' LIMIT 1");
     if ($row = mysqli_fetch_assoc($user_query)) {
         $display_name = $row['fullname'];

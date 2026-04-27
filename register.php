@@ -2,7 +2,7 @@
 include 'config.php'; 
 session_start();
 
-// --- 1. ACCESS CONTROL (Administrator Only) ---
+// --- 1. ACCESS CONTROL (Administrator Only) ---aaaa
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
