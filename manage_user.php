@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrator') {
+    // I-redirect siya pabalik sa dashboard
+    header("Location: index.php");
+    exit();
+}
 include 'config.php';
 
 

@@ -100,21 +100,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <nav class="nav-menu">
-        <a href="index.php" class="nav-item <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">
-            <i class="fas fa-th-large"></i> 
-            <span>Dashboards</span>
-        </a>
+    <a href="index.php" class="nav-item <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">
+        <i class="fas fa-th-large"></i> 
+        <span>Dashboards</span>
+    </a>
 
-        <a href="view_area.php" class="nav-item <?php echo ($current_page == 'view_area.php') ? 'active' : ''; ?>">
-            <i class="fas fa-map-marker-alt"></i> 
-            <span>View Areas</span>
-        </a>
+    <a href="view_area.php" class="nav-item <?php echo ($current_page == 'view_area.php') ? 'active' : ''; ?>">
+        <i class="fas fa-map-marker-alt"></i> 
+        <span>View Areas</span>
+    </a>
 
-        <a href="view_inventory.php" class="nav-item <?php echo ($current_page == 'view_inventory.php') ? 'active' : ''; ?>">
-            <i class="fas fa-boxes"></i> 
-            <span>View Inventory</span>
-        </a>
+    <a href="view_inventory.php" class="nav-item <?php echo ($current_page == 'view_inventory.php') ? 'active' : ''; ?>">
+        <i class="fas fa-boxes"></i> 
+        <span>View Inventory</span>
+    </a>
 
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Administrator'): ?>
+        
         <a href="create_item.php" class="nav-item <?php echo ($current_page == 'create_item.php') ? 'active' : ''; ?>">
             <i class="fas fa-plus-circle"></i> 
             <span>Assets Management</span>
@@ -124,6 +126,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <i class="fas fa-users-cog"></i> 
             <span>Manage Users</span>
         </a>
-    </nav>
+
+    <?php endif; ?>
+</nav>
 </div>
 </aside>
